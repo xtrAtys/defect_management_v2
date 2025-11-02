@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if defect %}Редактирование дефекта{% else %}Создание дефекта{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-{% if defect %}edit{% else %}plus{% endif %}"></i>
+                    {% if defect %}Редактирование дефекта{% else %}Создание дефекта{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Заголовок</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                               value="{{ defect.title|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Описание</label>
+                        <textarea class="form-control" id="description" name="description"
+                                  rows="4" required>{{ defect.description|default:'' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="project" class="form-label">Проект</label>
+                                <select class="form-control" id="project" name="project" required>
+                                    <option value="">Выберите проект</option>
+                                    {% for project in projects %}
+                                    <option value="{{ project.id }}"
+                                        {% if defect.project.id == project.id %}selected{% endif %}>
+                                        {{ project.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Приоритет</label>
+                                <select class="form-control" id="priority" name="priority" required>
+                                    <option value="low" {% if defect.priority == 'low' %}selected{% endif %}>Низкий</option>
+                                    <option value="medium" {% if defect.priority == 'medium' %}selected{% endif %}>Средний</option>
+                                    <option value="high" {% if defect.priority == 'high' %}selected{% endif %}>Высокий</option>
+                                    <option value="critical" {% if defect.priority == 'critical' %}selected{% endif %}>Критический</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="due_date" class="form-label">Срок исправления</label>
+                        <input type="date" class="form-control" id="due_date" name="due_date"
+                               value="{{ defect.due_date|date:'Y-m-d'|default:'' }}">
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'defect_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Отмена
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {% if defect %}Сохранить{% else %}Создать{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

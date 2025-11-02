@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Список дефектов{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-bug"></i> Дефекты</h1>
+    <a href="{% url 'defect_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Создать дефект
+    </a>
+</div>
+
+{% if defects %}
+    <div class="list-group">
+        {% for defect in defects %}
+        <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                    <a href="{% url 'defect_detail' defect.pk %}" class="text-decoration-none">
+                        {{ defect.title }}
+                    </a>
+                </h5>
+                <small class="text-muted">{{ defect.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+            <p class="mb-1">{{ defect.description|truncatewords:20 }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-secondary me-1">{{ defect.project.name }}</span>
+                    <span class="badge
+                        {% if defect.status == 'new' %}bg-secondary
+                        {% elif defect.status == 'in_progress' %}bg-primary
+                        {% elif defect.status == 'in_review' %}bg-warning
+                        {% elif defect.status == 'closed' %}bg-success
+                        {% else %}bg-danger{% endif %}">
+                        {{ defect.get_status_display }}
+                    </span>
+                    <span class="badge
+                        {% if defect.priority == 'low' %}bg-info
+                        {% elif defect.priority == 'medium' %}bg-primary
+                        {% elif defect.priority == 'high' %}bg-warning
+                        {% else %}bg-danger{% endif %}">
+                        {{ defect.get_priority_display }}
+                    </span>
+                </div>
+                <div>
+                    {% if defect.assignee %}
+                        <small class="text-muted">Исполнитель: {{ defect.assignee.get_full_name }}</small>
+                    {% else %}
+                        <small class="text-muted">Исполнитель не назначен</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <h4 class="alert-heading">Дефекты не найдены</h4>
+        <p class="mb-0">Начните с создания первого дефекта.</p>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Проекты{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-project-diagram"></i> Проекты</h1>
+    <a href="{% url 'project_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Создать проект
+    </a>
+</div>
+
+{% if projects %}
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.name }}</h5>
+                    <p class="card-text">{{ project.description|truncatewords:15|default:"Описание отсутствует" }}</p>
+
+                    <div class="mb-2">
+                        <span class="badge
+                            {% if project.status == 'planning' %}bg-secondary
+                            {% elif project.status == 'active' %}bg-success
+                            {% elif project.status == 'suspended' %}bg-warning
+                            {% elif project.status == 'completed' %}bg-primary
+                            {% else %}bg-danger{% endif %}">
+                            {{ project.get_status_display }}
+                        </span>
+                    </div>
+
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-user"></i> Менеджер: {{ project.manager.get_full_name }}
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i> {{ project.start_date }} - {{ project.end_date }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Подробнее</a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">Редактировать</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <h4 class="alert-heading">Проекты не найдены</h4>
+        <p class="mb-0">Создайте первый проект для начала работы.</p>
+    </div>
+{% endif %}
+{% endblock %}

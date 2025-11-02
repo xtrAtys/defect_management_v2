@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ defect.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{{ defect.title }}</h1>
+            <div>
+                <a href="{% url 'defect_edit' defect.pk %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-edit"></i> Редактировать
+                </a>
+                <a href="{% url 'defect_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </a>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Информация о дефекте</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Описание:</strong></p>
+                        <p>{{ defect.description|linebreaks }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Проект:</strong> {{ defect.project.name }}</p>
+                        <p><strong>Статус:</strong>
+                            <span class="badge
+                                {% if defect.status == 'new' %}bg-secondary
+                                {% elif defect.status == 'in_progress' %}bg-primary
+                                {% elif defect.status == 'in_review' %}bg-warning
+                                {% elif defect.status == 'closed' %}bg-success
+                                {% else %}bg-danger{% endif %}">
+                                {{ defect.get_status_display }}
+                            </span>
+                        </p>
+                        <p><strong>Приоритет:</strong>
+                            <span class="badge
+                                {% if defect.priority == 'low' %}bg-info
+                                {% elif defect.priority == 'medium' %}bg-primary
+                                {% elif defect.priority == 'high' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ defect.get_priority_display }}
+                            </span>
+                        </p>
+                        <p><strong>Автор:</strong> {{ defect.reporter.get_full_name }}</p>
+                        <p><strong>Исполнитель:</strong>
+                            {% if defect.assignee %}
+                                {{ defect.assignee.get_full_name }}
+                            {% else %}
+                                <span class="text-muted">Не назначен</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Срок:</strong>
+                            {% if defect.due_date %}
+                                {{ defect.due_date }}
+                            {% else %}
+                                <span class="text-muted">Не установлен</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Создан:</strong> {{ defect.created_at|date:"d.m.Y H:i" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

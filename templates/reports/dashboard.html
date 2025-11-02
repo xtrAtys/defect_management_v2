@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Дашборд отчетов{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-chart-line"></i> Дашборд отчетов</h1>
+    <div>
+        <a href="{% url 'defect_report' %}" class="btn btn-outline-primary">
+            <i class="fas fa-bug"></i> Отчет по дефектам
+        </a>
+        <a href="{% url 'export_defects_excel' %}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Экспорт
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ total_defects }}</h4>
+                        <p class="mb-0">Всего дефектов</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-bug fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ open_defects }}</h4>
+                        <p class="mb-0">Открытых</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ closed_defects }}</h4>
+                        <p class="mb-0">Закрытых</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ critical_defects }}</h4>
+                        <p class="mb-0">Критических</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-fire fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ overdue_defects }}</h4>
+                        <p class="mb-0">Просроченных</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ active_users }}</h4>
+                        <p class="mb-0">Активных пользователей</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Быстрые ссылки</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'defect_report' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-bug me-2"></i>Отчет по дефектам
+                    </a>
+                    <a href="{% url 'project_report' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-project-diagram me-2"></i>Отчет по проектам
+                    </a>
+                    <a href="{% url 'user_report' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>Отчет по пользователям
+                    </a>
+                    <a href="{% url 'export_defects_csv' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-csv me-2"></i>Экспорт в CSV
+                    </a>
+                    <a href="{% url 'export_defects_excel' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-excel me-2"></i>Экспорт в Excel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

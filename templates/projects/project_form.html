@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if project %}Редактирование проекта{% else %}Создание проекта{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-{% if project %}edit{% else %}plus{% endif %}"></i>
+                    {% if project %}Редактирование проекта{% else %}Создание проекта{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Название проекта</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{{ project.name|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Описание</label>
+                        <textarea class="form-control" id="description" name="description"
+                                  rows="4">{{ project.description|default:'' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Дата начала</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date"
+                                       value="{{ project.start_date|date:'Y-m-d'|default:'' }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">Дата окончания</label>
+                                <input type="date" class="form-control" id="end_date" name="end_date"
+                                       value="{{ project.end_date|date:'Y-m-d'|default:'' }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Статус</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="planning" {% if project.status == 'planning' %}selected{% endif %}>Планирование</option>
+                            <option value="active" {% if project.status == 'active' %}selected{% endif %}>Активный</option>
+                            <option value="suspended" {% if project.status == 'suspended' %}selected{% endif %}>Приостановлен</option>
+                            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>Завершен</option>
+                            <option value="cancelled" {% if project.status == 'cancelled' %}selected{% endif %}>Отменен</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="manager" class="form-label">Менеджер проекта</label>
+                        <select class="form-control" id="manager" name="manager" required>
+                            <option value="">Выберите менеджера</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}"
+                                {% if project.manager.id == user.id %}selected{% endif %}>
+                                {{ user.get_full_name }} ({{ user.get_role_display }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'project_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Отмена
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {% if project %}Сохранить{% else %}Создать{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
